@@ -1,5 +1,4 @@
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RadioTest {
@@ -18,7 +17,7 @@ public class RadioTest {
     }
 
     @Test
-    public void shouldNotSetCurrentStationIfStationIsGreaterThanNine() {
+    public void shouldNotSetCurrentStationIfStationIsEqualToMaxStation() {
         Radio radio = new Radio();
         radio.setCurrentStation(10);
         assertEquals(0, radio.getCurrentStation());
@@ -37,11 +36,11 @@ public class RadioTest {
     @Test
     public void shouldSwitchToPreviousStation() {
         Radio radio = new Radio();
-        radio.setCurrentStation(1);
-        radio.prevStation();
-        assertEquals(0, radio.getCurrentStation());
+        radio.setCurrentStation(0);
         radio.prevStation();
         assertEquals(9, radio.getCurrentStation());
+        radio.prevStation();
+        assertEquals(8, radio.getCurrentStation());
     }
 
     @Test
@@ -72,6 +71,48 @@ public class RadioTest {
         Radio radio = new Radio();
         radio.setCurrentVolume(0);
         radio.decreaseVolume();
+        assertEquals(0, radio.getCurrentVolume());
+    }
+
+    @Test
+    public void shouldSetMaxStationToTenByDefault() {
+        Radio radio = new Radio();
+        assertEquals(10, radio.getMaxStation());
+    }
+
+    @Test
+    public void shouldSetMaxStation() {
+        Radio radio = new Radio(15);
+        assertEquals(15, radio.getMaxStation());
+    }
+
+    @Test
+    public void shouldSwitchToFirstStationIfNextButtonPressedOnMaxStation() {
+        Radio radio = new Radio(5);
+        radio.setCurrentStation(4);
+        radio.nextStation();
+        assertEquals(0, radio.getCurrentStation());
+    }
+
+    @Test
+    public void shouldSwitchToLastStationIfPrevButtonPressedOnFirstStation() {
+        Radio radio = new Radio(8);
+        radio.setCurrentStation(0);
+        radio.prevStation();
+        assertEquals(7, radio.getCurrentStation());
+    }
+
+    @Test
+    public void shouldNotSetCurrentVolumeIfValueIsGreaterThanMaxVolume() {
+        Radio radio = new Radio();
+        radio.setCurrentVolume(150);
+        assertEquals(0, radio.getCurrentVolume());
+    }
+
+    @Test
+    public void shouldNotSetCurrentVolumeIfValueIsLessThanMinVolume() {
+        Radio radio = new Radio();
+        radio.setCurrentVolume(-50);
         assertEquals(0, radio.getCurrentVolume());
     }
 }
